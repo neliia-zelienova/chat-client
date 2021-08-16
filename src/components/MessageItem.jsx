@@ -9,7 +9,11 @@ const MessageItem = ({ message }) => {
         <p>{message.username}</p>
       </Card.Header>
       <Card.Body>
-        <Card.Text bsPrefix={styles.message_text} as="p">
+        <Card.Text
+          bsPrefix={styles.message_text}
+          as="p"
+          style={{ color: `#${message.color}` }}
+        >
           {message.message}
         </Card.Text>
       </Card.Body>

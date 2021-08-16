@@ -9,9 +9,9 @@ const MessagesList = ({ messages }) => {
   return (
     <ListGroup>
       {messages.map((item) => (
-        <ListGroup.Item bsPrefix={styles.list_item}>
-          <Row key={item.id}>
-            {item.type === "text" ? (
+        <ListGroup.Item bsPrefix={styles.list_item} key={item.id}>
+          <Row>
+            {item?.type === "text" ? (
               <Col lg={9}>
                 <MessageItem message={item} />
               </Col>

@@ -31,6 +31,12 @@ const ChatView = ({ updateToken }) => {
     socket.current.on("user data", (data) => {
       data && setCurrentUser(data);
     });
+    socket.current.on("user data:mute", (muted) => {
+      setCurrentUser((prevData) => ({ ...prevData, muted }));
+    });
+    socket.current.on("user data:ban", (banned) => {
+      setError("ban");
+    });
     socket.current.on("connect_error", (error) => {
       setError(error.message);
     });
@@ -41,20 +47,26 @@ const ChatView = ({ updateToken }) => {
     socket.current.on("users", (data) => {
       setUserList(data);
     });
-    socket.current.on("banned", (data) => {
-      setError(data);
-    });
     socket.current.on("all users", (data) => {
       setUserList(data);
     });
     socket.current.on("message", (data) => {
       setMessage((prevState) => [...prevState, data]);
     });
+    socket.current.on("muted:message", ({ user, muteMessageData }) => {
+      setMessage((prevState) => [...prevState, muteMessageData]);
+      setUserList((prevData) =>
+        prevData.map((item) => (item._id === user._id ? user : item))
+      );
+    });
+    socket.current.on("banned:message", ({ user, banMessageData }) => {
+      setMessage((prevState) => [...prevState, banMessageData]);
+      setUserList((prevData) =>
+        prevData.map((item) => (item._id === user._id ? user : item))
+      );
+    });
     socket.current.on("message:accepted", () => {
       toggleMessageSent();
-    });
-    socket.current.on("message:wait timeout", () => {
-      console.log("message denided of timeout");
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -76,7 +88,8 @@ const ChatView = ({ updateToken }) => {
       updateToken("");
       history.push(routes.login);
     }
-    if (error.toLowerCase().includes("banned")) history.push(routes.banned);
+    if (error.toLowerCase().includes("ban")) history.push(routes.banned);
+    return () => socket.current.removeAllListeners();
   }, [error, history, updateToken]);
 
   return (
