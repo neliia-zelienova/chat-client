@@ -73,9 +73,6 @@
   overflow-x: hidden;
 }
 
-.currentUser_message {
-}
-
 ::-webkit-scrollbar {
   width: 7px;
 }
