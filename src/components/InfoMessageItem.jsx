@@ -9,8 +9,7 @@ const InfoMessageItem = ({ message }) => {
         <Card.Text as="div">
           <p className={styles.info_message_text}>
             <span className={styles.username}>{message.username}</span>
-            <span> </span>
-            <span>{message.message}</span>
+            <span>&nbsp;{message.message}</span>
           </p>
         </Card.Text>
       </Card.Body>

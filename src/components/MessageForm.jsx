@@ -9,7 +9,7 @@ const MessageForm = ({ sendMessage, user, messageState, toggleSent }) => {
   const [message, setMessage] = useState("");
 
   const handleMessage = (e) => {
-    setMessage(e.target.value.slice(0, 200));
+    setMessage(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -35,9 +35,17 @@ const MessageForm = ({ sendMessage, user, messageState, toggleSent }) => {
             placeholder="Type a message"
             disabled={user?.muted}
           />
-          <Form.Text className="text-muted">
-            Message length {message.length}
-          </Form.Text>
+          {message.length > 0 && (
+            <Form.Text className="text-muted">
+              <span
+                style={{
+                  color: `#${message.length > 200 ? "c71c1c" : "6c757d"} `,
+                }}
+              >
+                Message length {message.length}
+              </span>
+            </Form.Text>
+          )}
           {messageState && (
             <Form.Text className="text-muted">
               <Timer
@@ -52,7 +60,7 @@ const MessageForm = ({ sendMessage, user, messageState, toggleSent }) => {
         <Button
           variant="success"
           type="submit"
-          disabled={user?.muted || messageState}
+          disabled={user?.muted || messageState || message.length > 200}
         >
           Send
         </Button>

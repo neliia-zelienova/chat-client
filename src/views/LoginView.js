@@ -1,3 +1,4 @@
+import Header from "../components/Header";
 import api from "../services/apiServices";
 import Login from "../components/Login";
 import { useEffect, useState } from "react";
@@ -21,6 +22,7 @@ const LoginView = ({ updateToken }) => {
 
   return (
     <Container>
+      <Header />
       <Login onSubmit={handleLogin} />
       {error && <p>Login error: {error}</p>}
     </Container>

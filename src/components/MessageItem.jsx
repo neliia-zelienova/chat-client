@@ -2,10 +2,19 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Card from "react-bootstrap/Card";
 import styles from "./MessagesList.module.css";
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({ message, currentUser }) => {
   return (
-    <Card bsPrefix={styles.message_card}>
-      <Card.Header bsPrefix={styles.message_username}>
+    <Card
+      bsPrefix={
+        message.username === currentUser
+          ? [styles.message_card, styles.currentUser].join(" ")
+          : styles.message_card
+      }
+    >
+      <Card.Header
+        bsPrefix={styles.message_username}
+        style={{ color: `#${message.color}` }}
+      >
         <p>{message.username}</p>
       </Card.Header>
       <Card.Body>

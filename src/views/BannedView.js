@@ -1,4 +1,6 @@
+import Header from "../components/Header";
 import api from "../services/apiServices";
+import BunnedComponent from "../components/BunnedComponent";
 
 const BannedView = ({ updateToken }) => {
   const handleLogout = async () => {
@@ -7,13 +9,10 @@ const BannedView = ({ updateToken }) => {
   };
 
   return (
-    <div>
-      <p>It seems like you were banned by an admin...</p>
-      <p>Wait anti he/shewill unbanned you</p>
-      <p>
-        You can <button onClick={handleLogout}>Logout</button> here
-      </p>
-    </div>
+    <>
+      <Header />
+      <BunnedComponent logout={handleLogout} />
+    </>
   );
 };
 

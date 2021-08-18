@@ -15,7 +15,6 @@ const login = async (username, password) => {
 };
 
 const logout = async (token) => {
-  console.log("logout", logout);
   try {
     axios.defaults.headers.common = { Authorization: `Bearer ${token}` };
     const { data } = await axios.post("http://localhost:3001/users/logout");

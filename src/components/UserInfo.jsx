@@ -6,12 +6,13 @@ const UserInfo = ({ user }) => {
   return (
     <Container>
       <Row>
-        <Col>
-          <p>{`${user?.admin ? "Administrator:" : "Username:"} ${
-            user?.username
-          }`}</p>
+        <Col style={{ alignSelf: "center" }} as="p">
+          {`${user?.admin ? "Administrator:" : "Username:"}`}
+          <span style={{ color: `#${user?.color}` }}>
+            &nbsp;{user?.username}
+          </span>
         </Col>
-        <Col>
+        <Col style={{ alignSelf: "center" }}>
           <Figure>
             <Figure.Image
               width={40}

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import api from "../services/apiServices";
 import { io } from "socket.io-client";
 import MessageForm from "../components/MessageForm";
 import UsersList from "../components/UsersList";
@@ -7,6 +8,7 @@ import UserInfo from "../components/UserInfo";
 import { useHistory } from "react-router-dom";
 import routes from "../routes";
 import { Container, Row, Col } from "react-bootstrap";
+import Header from "../components/Header";
 
 const ChatView = ({ updateToken }) => {
   const socket = useRef(null);
@@ -38,6 +40,7 @@ const ChatView = ({ updateToken }) => {
       setError("ban");
     });
     socket.current.on("connect_error", (error) => {
+      console.log("connect_error");
       setError(error.message);
     });
 
@@ -84,18 +87,30 @@ const ChatView = ({ updateToken }) => {
   };
 
   useEffect(() => {
-    if (error === "Token error") {
+    if (error.toLowerCase().includes("ban")) history.push(routes.banned);
+    else if (error !== "") {
       updateToken("");
       history.push(routes.login);
     }
-    if (error.toLowerCase().includes("ban")) history.push(routes.banned);
+
     return () => socket.current.removeAllListeners();
   }, [error, history, updateToken]);
+
+  const handleLogout = async () => {
+    await api.logout(localStorage.getItem("token"));
+    updateToken("");
+    socket.current.disconnect();
+    socket.current.removeAllListeners();
+    history.push(routes.login);
+  };
 
   return (
     <Container>
       <Row>
-        <Col>
+        <Header handleLogout={handleLogout} />
+      </Row>
+      <Row>
+        <Col lg={currentUser?.admin ? 5 : 3} xs={11}>
           <Row>
             <UserInfo user={currentUser} />
           </Row>
@@ -108,8 +123,11 @@ const ChatView = ({ updateToken }) => {
             />
           </Row>
         </Col>
-        <Col lg={currentUser?.admin ? 7 : 9}>
-          <MessagesList messages={messagesList} />
+        <Col>
+          <MessagesList
+            messages={messagesList}
+            currentUsername={currentUser?.username}
+          />
           <MessageForm
             sendMessage={sendMessage}
             user={currentUser}

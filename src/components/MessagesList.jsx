@@ -5,25 +5,33 @@ import MessageItem from "./MessageItem";
 import InfoMessageItem from "./InfoMessageItem";
 import styles from "./MessagesList.module.css";
 
-const MessagesList = ({ messages }) => {
+const MessagesList = ({ messages, currentUsername }) => {
   return (
-    <ListGroup>
-      {messages.map((item) => (
-        <ListGroup.Item bsPrefix={styles.list_item} key={item.id}>
-          <Row>
-            {item?.type === "text" ? (
-              <Col lg={9}>
-                <MessageItem message={item} />
-              </Col>
-            ) : (
-              <Col lg={7}>
-                <InfoMessageItem message={item} />
-              </Col>
-            )}
-          </Row>
-        </ListGroup.Item>
-      ))}
-    </ListGroup>
+    <>
+      {messages.length > 0 ? (
+        <ListGroup
+          as="ul"
+          style={{ listStyle: "none" }}
+          bsPrefix={styles.message_list}
+        >
+          {messages
+            .map((item) => (
+              <ListGroup.Item bsPrefix={styles.list_item} key={item.id} as="li">
+                {item?.type === "text" ? (
+                  <MessageItem message={item} currentUser={currentUsername} />
+                ) : (
+                  <InfoMessageItem message={item} />
+                )}
+              </ListGroup.Item>
+            ))
+            .reverse()}
+        </ListGroup>
+      ) : (
+        <div className={styles.start_message}>
+          <p>Hi! Messages will appear here</p>{" "}
+        </div>
+      )}
+    </>
   );
 };
 
