@@ -1,12 +1,12 @@
 import "./App.css";
-import LoginView from "./views/LoginView";
-import ChatView from "./views/ChatView";
+import { React, useEffect, useState } from "react";
 import { Switch } from "react-router-dom";
 import routes from "./routes";
 import PublicRoute from "./components/PublicRoute";
 import PrivateRoute from "./components/PrivateRoute";
-import { React, useEffect, useState } from "react";
 import BannedView from "./views/BannedView";
+import LoginView from "./views/LoginView";
+import ChatView from "./views/ChatView";
 
 const App = () => {
   const [token, setToken] = useState("");

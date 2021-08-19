@@ -1,4 +1,7 @@
-import { Container, Col, Row, Figure } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Figure from "react-bootstrap/Figure";
 import muted from "../img/mute.svg";
 import record from "../img/record.svg";
 
@@ -8,7 +11,7 @@ const UserInfo = ({ user }) => {
       <Row>
         <Col style={{ alignSelf: "center" }} as="p">
           {`${user?.admin ? "Administrator:" : "Username:"}`}
-          <span style={{ color: `#${user?.color}` }}>
+          <span style={{ color: `#${user?.color}`, fontWeight: "600" }}>
             &nbsp;{user?.username}
           </span>
         </Col>

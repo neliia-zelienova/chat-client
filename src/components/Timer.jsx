@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Timer = ({ text, timeout, timerExceed }) => {
   const [seconds, setSeconds] = useState(timeout);

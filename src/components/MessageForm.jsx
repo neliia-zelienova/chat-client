@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Timer from "./Timer";
@@ -60,7 +58,7 @@ const MessageForm = ({ sendMessage, user, messageState, toggleSent }) => {
         <Button
           variant="success"
           type="submit"
-          disabled={user?.muted || messageState || message.length > 200}
+          disabled={user?.muted || messageState || message.trim().length > 200}
         >
           Send
         </Button>

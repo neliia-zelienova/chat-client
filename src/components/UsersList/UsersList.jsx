@@ -3,10 +3,10 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
-import muted from "../img/mute.svg";
-import record from "../img/record.svg";
-import ban from "../img/ban.svg";
-import unban from "../img/unban.svg";
+import muted from "../../img/mute.svg";
+import record from "../../img/record.svg";
+import ban from "../../img/ban.svg";
+import unban from "../../img/unban.svg";
 import styles from "./UserList.module.css";
 
 const UsersList = ({ users, currentUser, handleBan, handleMute }) => {
@@ -20,13 +20,24 @@ const UsersList = ({ users, currentUser, handleBan, handleMute }) => {
   return (
     <ListGroup
       as="ul"
-      style={{ listStyle: "none", paddingLeft: "10px", paddingRight: "10px" }}
+      style={{
+        maxHeight: "390px",
+        paddingBottom: "10px",
+        overflowY: "scroll",
+        overflowX: "hidden",
+        listStyle: "none",
+        paddingLeft: "10px",
+        paddingRight: "10px",
+        marginBottom: "20px",
+      }}
     >
       {users?.map((user) => (
         <ListGroup.Item key={user._id} bsPrefix={styles.list_item} as="li">
           <Row style={{ alignSelf: "center" }}>
             <Col as="div" lg={5} md={4} xs={3}>
-              <span style={{ color: `#${user.color}` }}>{user.username}</span>
+              <span style={{ color: `#${user.color}`, fontWeight: "600" }}>
+                {user.username}
+              </span>
             </Col>
             <Col lg={3} md={4} xs={4}>
               <Row>
@@ -72,7 +83,7 @@ const UsersList = ({ users, currentUser, handleBan, handleMute }) => {
                         data-value={user._id}
                         width={25}
                         height={25}
-                        alt="muted state"
+                        alt="mute"
                         src={user?.muted ? record : muted}
                       />
                     </Button>
@@ -90,7 +101,7 @@ const UsersList = ({ users, currentUser, handleBan, handleMute }) => {
                         data-value={user._id}
                         width={25}
                         height={25}
-                        alt="muted state"
+                        alt="ban"
                         src={user.banned ? unban : ban}
                       />
                     </Button>

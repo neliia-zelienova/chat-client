@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import api from "../services/apiServices";
 import { io } from "socket.io-client";
+import { useHistory } from "react-router-dom";
+import api from "../services/apiServices";
+import Header from "../components/Header";
 import MessageForm from "../components/MessageForm";
 import UsersList from "../components/UsersList";
 import MessagesList from "../components/MessagesList";
 import UserInfo from "../components/UserInfo";
-import { useHistory } from "react-router-dom";
 import routes from "../routes";
-import { Container, Row, Col } from "react-bootstrap";
-import Header from "../components/Header";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
+const SERVER_URL = process.env.PORT || "http://localhost:3001/";
 
 const ChatView = ({ updateToken }) => {
   const socket = useRef(null);
@@ -28,7 +32,7 @@ const ChatView = ({ updateToken }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    socket.current = io("http://localhost:3001/", { query: { token } });
+    socket.current = io(SERVER_URL, { query: { token } });
 
     socket.current.on("user data", (data) => {
       data && setCurrentUser(data);
@@ -88,11 +92,12 @@ const ChatView = ({ updateToken }) => {
 
   useEffect(() => {
     if (error.toLowerCase().includes("ban")) history.push(routes.banned);
-    else if (error !== "") {
+    else if (error.includes("Token") || error.includes("User")) {
       updateToken("");
       history.push(routes.login);
+    } else if (error.includes("double")) {
+      history.push(routes.login);
     }
-
     return () => socket.current.removeAllListeners();
   }, [error, history, updateToken]);
 

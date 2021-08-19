@@ -1,8 +1,10 @@
 import Button from "react-bootstrap/Button";
-import { Container, Row, Col, Figure, Image } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Image from "react-bootstrap/Image";
 import styles from "./Header.module.css";
-import logout from "../img/logout.svg";
-import logo from "../img/chat.svg";
+import logo from "../../img/chat.svg";
 
 const Header = ({ handleLogout }) => {
   return (
