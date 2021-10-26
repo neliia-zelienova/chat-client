@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Timer from "./Timer";
+import { useState, useEffect } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Timer from './Timer';
 
 const MessageForm = ({ sendMessage, user, messageState, toggleSent }) => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
-  const handleMessage = (e) => {
+  const handleMessage = e => {
     setMessage(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     if (message.trim().length) {
       sendMessage(message, user?._id);
@@ -18,7 +18,7 @@ const MessageForm = ({ sendMessage, user, messageState, toggleSent }) => {
   };
 
   useEffect(() => {
-    if (messageState) setMessage("");
+    if (messageState) setMessage('');
   }, [messageState]);
   return (
     <div>
@@ -37,7 +37,7 @@ const MessageForm = ({ sendMessage, user, messageState, toggleSent }) => {
             <Form.Text className="text-muted">
               <span
                 style={{
-                  color: `#${message.length > 200 ? "c71c1c" : "6c757d"} `,
+                  color: `#${message.length > 200 ? 'c71c1c' : '6c757d'} `,
                 }}
               >
                 Message length {message.length}

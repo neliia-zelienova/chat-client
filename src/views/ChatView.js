@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useHistory } from 'react-router-dom';
-import api from '../services/apiServices';
 import Header from '../components/Header';
 import MessageForm from '../components/MessageForm';
 import UsersList from '../components/UsersList';
@@ -20,14 +19,11 @@ const ChatView = ({ updateToken }) => {
   const [usersList, setUserList] = useState([]);
   const [messagesList, setMessage] = useState([]);
   const [error, setError] = useState('');
-
   const [messageSent, setMessagese] = useState(false);
-
+  const history = useHistory();
   const toggleMessageSent = () => {
     setMessagese(prevState => !prevState);
   };
-
-  const history = useHistory();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -37,10 +33,10 @@ const ChatView = ({ updateToken }) => {
     socket.current.on('user data', data => {
       data && setCurrentUser(data);
     });
-    socket.current.on('user data:mute', muted => {
+    socket.current.on('user data:muted', muted => {
       setCurrentUser(prevData => ({ ...prevData, muted }));
     });
-    socket.current.on('user data:ban', banned => {
+    socket.current.on('user data:banned', banned => {
       setError('ban');
     });
     socket.current.on('connect_error', error => {
@@ -53,20 +49,23 @@ const ChatView = ({ updateToken }) => {
     socket.current.on('users', data => {
       setUserList(data);
     });
+    socket.current.on('history', data => {
+      setMessage(() => [...data]);
+    });
     socket.current.on('all users', data => {
       setUserList(data);
     });
     socket.current.on('message', data => {
       setMessage(prevState => [...prevState, data]);
     });
-    socket.current.on('muted:message', ({ user, muteMessageData }) => {
-      setMessage(prevState => [...prevState, muteMessageData]);
+    socket.current.on('muted:message', ({ user, toggleMessageData }) => {
+      setMessage(prevState => [...prevState, toggleMessageData]);
       setUserList(prevData =>
         prevData.map(item => (item._id === user._id ? user : item)),
       );
     });
-    socket.current.on('banned:message', ({ user, banMessageData }) => {
-      setMessage(prevState => [...prevState, banMessageData]);
+    socket.current.on('banned:message', ({ user, toggleMessageData }) => {
+      setMessage(prevState => [...prevState, toggleMessageData]);
       setUserList(prevData =>
         prevData.map(item => (item._id === user._id ? user : item)),
       );
@@ -77,8 +76,8 @@ const ChatView = ({ updateToken }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const sendMessage = message => {
-    socket.current.emit('message', message, currentUser._id);
+  const sendMessage = (message, user_id) => {
+    socket.current.emit('message', message, user_id);
   };
 
   const handleBan = userId => {
@@ -90,18 +89,25 @@ const ChatView = ({ updateToken }) => {
   };
 
   useEffect(() => {
-    if (error.toLowerCase().includes('ban')) history.push(routes.banned);
-    else if (error.includes('Token') || error.includes('User')) {
-      updateToken('');
-      history.push(routes.login);
-    } else if (error.includes('double')) {
-      history.push(routes.login);
+    switch (error.toLowerCase().split(' ')[0]) {
+      case 'ban':
+      case 'banned':
+        history.push(routes.banned);
+        break;
+      case 'token':
+        updateToken('');
+        history.push(routes.login);
+        break;
+      case 'double':
+        history.push(routes.login);
+        break;
+      default:
+        break;
     }
     return () => socket.current.removeAllListeners();
   }, [error, history, updateToken]);
 
   const handleLogout = async () => {
-    await api.logout(localStorage.getItem('token'));
     updateToken('');
     socket.current.disconnect();
     socket.current.removeAllListeners();

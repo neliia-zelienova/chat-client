@@ -1,47 +1,47 @@
-import Button from "react-bootstrap/Button";
-import ListGroup from "react-bootstrap/ListGroup";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Image from "react-bootstrap/Image";
-import muted from "../../img/mute.svg";
-import record from "../../img/record.svg";
-import ban from "../../img/ban.svg";
-import unban from "../../img/unban.svg";
-import styles from "./UserList.module.css";
+import Button from 'react-bootstrap/Button';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import muted from '../../img/mute.svg';
+import record from '../../img/record.svg';
+import ban from '../../img/ban.svg';
+import unban from '../../img/unban.svg';
+import styles from './UserList.module.css';
 
 const UsersList = ({ users, currentUser, handleBan, handleMute }) => {
-  const handleUserBan = (e) => {
+  const handleUserBan = e => {
     handleBan(e.target.dataset.value);
   };
 
-  const handleUserMute = (e) => {
+  const handleUserMute = e => {
     handleMute(e.target.dataset.value);
   };
   return (
     <ListGroup
       as="ul"
       style={{
-        maxHeight: "390px",
-        paddingBottom: "10px",
-        overflowY: "scroll",
-        overflowX: "hidden",
-        listStyle: "none",
-        paddingLeft: "10px",
-        paddingRight: "10px",
-        marginBottom: "20px",
+        maxHeight: '390px',
+        paddingBottom: '10px',
+        overflowY: 'scroll',
+        overflowX: 'hidden',
+        listStyle: 'none',
+        paddingLeft: '10px',
+        paddingRight: '10px',
+        marginBottom: '20px',
       }}
     >
-      {users?.map((user) => (
+      {users?.map(user => (
         <ListGroup.Item key={user._id} bsPrefix={styles.list_item} as="li">
-          <Row style={{ alignSelf: "center" }}>
+          <Row style={{ alignSelf: 'center' }}>
             <Col as="div" lg={5} md={4} xs={3}>
-              <span style={{ color: `#${user.color}`, fontWeight: "600" }}>
+              <span style={{ color: `#${user.color}`, fontWeight: '600' }}>
                 {user.username}
               </span>
             </Col>
             <Col lg={3} md={4} xs={4}>
               <Row>
-                <Col style={{ alignSelf: "center" }} lg={3} md={4} xs={3}>
+                <Col style={{ alignSelf: 'center' }} lg={3} md={4} xs={3}>
                   <div
                     className={user.online ? styles.online : styles.offline}
                   ></div>
@@ -76,7 +76,7 @@ const UsersList = ({ users, currentUser, handleBan, handleMute }) => {
                       size="sm"
                       onClick={handleUserMute}
                       variant={
-                        user?.muted ? "outline-success" : "outline-danger"
+                        user?.muted ? 'outline-success' : 'outline-danger'
                       }
                     >
                       <Image
@@ -94,7 +94,7 @@ const UsersList = ({ users, currentUser, handleBan, handleMute }) => {
                       size="sm"
                       onClick={handleUserBan}
                       variant={
-                        user?.banned ? "outline-success" : "outline-danger"
+                        user?.banned ? 'outline-success' : 'outline-danger'
                       }
                     >
                       <Image
